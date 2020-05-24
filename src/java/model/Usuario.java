@@ -7,12 +7,10 @@ package model;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -29,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
     , @NamedQuery(name = "Usuario.findByNif", query = "SELECT u FROM Usuario u WHERE u.nif = :nif")
+    , @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password")
     , @NamedQuery(name = "Usuario.findByFirstLogin", query = "SELECT u FROM Usuario u WHERE u.firstLogin = :firstLogin")
     , @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre")
     , @NamedQuery(name = "Usuario.findByApe1", query = "SELECT u FROM Usuario u WHERE u.ape1 = :ape1")
@@ -44,9 +43,8 @@ public class Usuario implements Serializable {
     @Column(name = "nif")
     private Integer nif;
     @Basic(optional = false)
-    @Lob
     @Column(name = "password")
-    private byte[] password;
+    private String password;
     @Basic(optional = false)
     @Column(name = "first_login")
     private boolean firstLogin;
@@ -67,8 +65,6 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @Column(name = "mail")
     private String mail;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "nif")
-    private FraVenta fraVenta;
     @JoinColumn(name = "c_postal", referencedColumnName = "c_postal")
     @OneToOne(optional = false)
     private Ciudad cPostal;
@@ -80,7 +76,7 @@ public class Usuario implements Serializable {
         this.nif = nif;
     }
 
-    public Usuario(Integer nif, byte[] password, boolean firstLogin, String nombre, String ape1, String dir, long tel, String mail) {
+    public Usuario(Integer nif, String password, boolean firstLogin, String nombre, String ape1, String dir, long tel, String mail) {
         this.nif = nif;
         this.password = password;
         this.firstLogin = firstLogin;
@@ -99,11 +95,11 @@ public class Usuario implements Serializable {
         this.nif = nif;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
@@ -161,14 +157,6 @@ public class Usuario implements Serializable {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public FraVenta getFraVenta() {
-        return fraVenta;
-    }
-
-    public void setFraVenta(FraVenta fraVenta) {
-        this.fraVenta = fraVenta;
     }
 
     public Ciudad getCPostal() {

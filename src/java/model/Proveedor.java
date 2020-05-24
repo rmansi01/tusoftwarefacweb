@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Paula
+ * @author Raúl Mansilla
  */
 @Entity
 @Table(name = "proveedor")
