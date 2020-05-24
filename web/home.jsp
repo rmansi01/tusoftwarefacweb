@@ -146,12 +146,14 @@
             </div>
           </div>
           <div class="col mb-4">
+              <a href="Controller?op=getArt">
             <div class="card">
               <img src="img/articulos.jpg" class="card-img-top" height="150px" alt="...">
               <div class="card-body">
                 <h5 class="card-title">Articulos</h5>
               </div>
             </div>
+              </a>
           </div>
           <div class="col mb-4">
             <div class="card">

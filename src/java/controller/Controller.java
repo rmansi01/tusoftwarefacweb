@@ -8,6 +8,8 @@ package controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jpautil.JPAUtil;
+import model.Articulo;
 import model.Usuario;
 
 /**
@@ -82,6 +85,13 @@ public class Controller extends HttpServlet {
         } else if (op.equals("logout")){
             session.setAttribute("usuario", null);
             dispatcher = request.getRequestDispatcher("login.jsp");
+            dispatcher.forward(request, response);
+        } else if (op.equals("getArt")){
+            session.setAttribute("getting", "Articles");
+            q = em.createQuery("select a from Articulo a");
+            List<Articulo> articulos = q.getResultList();
+            session.setAttribute("articulos", articulos);
+            dispatcher=request.getRequestDispatcher("maestro.jsp");
             dispatcher.forward(request, response);
         }
     }
