@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jpautil.JPAUtil;
 import model.Articulo;
+import model.Cliente;
+import model.Proveedor;
 import model.Usuario;
 
 /**
@@ -92,6 +94,18 @@ public class Controller extends HttpServlet {
             List<Articulo> articulos = q.getResultList();
             session.setAttribute("articulos", articulos);
             dispatcher=request.getRequestDispatcher("maestro.jsp");
+            dispatcher.forward(request, response);
+        } else if(op.equals("getCli")){
+            session.setAttribute("getting", "cli");
+            q = em.createQuery("select c from Cliente c");
+            List<Cliente> clientes = q.getResultList();
+            dispatcher = request.getRequestDispatcher("maestro.jsp");
+            dispatcher.forward(request, response);
+        } else if(op.equals("getProv")){
+            session.setAttribute("getting", "prov");
+            q = em.createQuery("select p from Proveedor p");
+            List<Proveedor> proveedores = q.getResultList();
+            dispatcher = request.getRequestDispatcher("maestro.jsp");
             dispatcher.forward(request, response);
         }
     }

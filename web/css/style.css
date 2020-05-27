@@ -9,3 +9,9 @@
 label{
     color: #fff;
 }
+
+a .card:hover {
+    background-color: #0275d8;
+    color: #fff;
+    text-decoration: none !important;
+}

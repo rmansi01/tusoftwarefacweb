@@ -4,6 +4,9 @@
     Author     : Raúl Mansilla
 --%>
 
+<%@page import="model.FraVenta"%>
+<%@page import="model.FraCompra"%>
+<%@page import="model.Proveedor"%>
 <%@page import="model.Cliente"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Articulo"%>
@@ -30,6 +33,9 @@
         <% String getting = (String) session.getAttribute("getting");
          List<Articulo> articulos = (List<Articulo>) session.getAttribute("articulos");
          List<Cliente> clientes = (List<Cliente>) session.getAttribute("clientes");
+         List<Proveedor> proveedores = (List<Proveedor>) session.getAttribute("proveedores");
+         List<FraCompra> fracs = (List<FraCompra>) session.getAttribute("fracs");
+         List<FraVenta> fravs = (List<FraVenta>) session.getAttribute("fravs");
         %>
         <nav id="main-nav" class="navbar navbar-expand-lg navbar-dark bg-dark">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -184,6 +190,7 @@
 
         <div class="card p-2 mx-5">
             <% if (getting == "Articles") { %>
+            <a href="Controller?op=newArt" class="btn btn-primary">A&ntilde;adir nuevo</a>
             <table id="tableart" class="table table-responsive-md table-striped table-dark">
                 <thead>
                     <tr>
@@ -220,7 +227,7 @@
                 </tbody>
             </table>
             <%} else if (getting == "cli") {%>
-
+               <a href="Controller?op=newCli" class="btn btn-primary">A&ntilde;adir nuevo</a>
             <table id="tablecli" class="table table-responsive-md table-striped table-dark">
                 <thead>
                     <tr>
@@ -234,20 +241,24 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <%if (proveedores != null){
+                        for (Cliente cliente : clientes){%>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Paula</td>
-                        <td>Mansilla</td>
-                        <td>Cruz</td>
-                        <td>Av. Par&iacute;s, 59</td>
-                        <td>paulii21098@outlook.com</td>
-                        <td>684072818</td>
-                        <td><a class="btn btn-primary" href="#">Ver</a></td>
+                        <th scope="row"><%=cliente.getNifcif() %></th>
+                        <td><%=cliente.getNombre()%></td>
+                        <td><%=cliente.getApe1() %></td>
+                        <td><%=cliente.getApe2() %></td>
+                        <td><%=cliente.getDir() %></td>
+                        <td><%=cliente.getMail()%></td>
+                        <td><%=cliente.getTelefono() %></td>
+                        <td><a class="btn btn-primary" href="Controller?op=seecli&nif=<%=cliente.getNifcif() %>">Ver</a></td>
                     </tr>
+                    <%}
+                    }%>
                 </tbody>
             </table>
             <%} else if (getting == "prov") {%>
-
+            <a href="Controller?op=newProv" class="btn btn-primary">A&ntilde;adir nuevo</a>
             <table id="tableprov" class="table table-responsive-md table-striped table-dark">
                 <thead>
                     <tr>
@@ -260,36 +271,66 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <%if (proveedores != null){
+                        for (Proveedor proveedor : proveedores){ %>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>MediaMarkt</td>
-                        <td><a href="https://mediamarkt.es" target="_blank">mediamarkt.es</a></td>
-                        <td>Parque Comercial Abadia, Ctra. Toledo - Bargas km 5.600, A-42 Salida 63, Toledo</td>
-                        <td>925112233</td>
-                        <td>toledo@mediamarkt.es</td>
-                        <td><a class="btn btn-primary" href="#">Ver</a></td>
+                        <th scope="row"><%=proveedor.getCProveedor() %></th>
+                        <td><%=proveedor.getNombre() %></td>
+                        <td><a href="<%=proveedor.getWeb() %>" target="_blank">Ver sitio web</a></td>
+                        <td><%=proveedor.getDir() %></td>
+                        <td><%=proveedor.getTelefono() %></td>
+                        <td><%=proveedor.getMail() %></td>
+                        <td><a class="btn btn-primary" href="Controller?op=seeprov&id=<%=proveedor.getCProveedor() %>">Ver</a></td>
                     </tr>
+                    <%}
+                       }%>
                 </tbody>
             </table>
-            <%} else if (getting == "frav" || getting == "frac") {%>
-
+            <%} else if (getting == "frav" || getting == "frac") {
+                if (getting == "frav"){%>
+                <a href="Controller?op=newFrav" class="btn btn-primary">A&ntilde;adir nueva</a> <%
+                    } else { %>
+                    <a href="Controller?op=newFrac" class="btn btn-primary">A&ntilde;adir nueva</a>
+            <%}%>
+            
             <table id="tablefra" class="table table-responsive-md table-striped table-dark">
                 <thead>
                     <tr>
                         <th scope="col">Nº de factura</th>
-                        <th scope="col">NIF</th>
+                        <th scope="col">
+                            <%if (getting == "frav"){
+                                %>NIF / CIF
+                           <% } else {%>
+                           C_Proveedor
+                           <%}%>
+                        </th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Importe (&euro;)</th>
                     </tr>
                 </thead>
                 <tbody>
+                   <% if (getting == "frav" && fravs != null){
+                       for (FraVenta frav : fravs){ %>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>51192045</td>
-                        <td>26/05/2020</td>
-                        <td>200,00</td>
-                        <td><a class="btn btn-primary" href="#">Ver</a></td>
+                        <th scope="row"><%= frav.getCFrav() %></th>
+                        <td><%=frav.getNifcif() %></td>
+                        <td><%=frav.getFecha() %></td>
+                        <td><%=frav.getTotal() %></td>
+                        <td><a class="btn btn-primary" href="Controller?op=seefrav&id=<%=frav.getCFrav() %>">Ver</a></td>
                     </tr>
+                    <%}
+                       }else {
+                            <%if (fracs != null){
+                        for (FraCompra frac : fracs){%>
+                     <tr>
+                        <th scope="row"><%= frac.getCFrac() %></th>
+                        <td><%=frac.getCProveedor() %></td>
+                        <td><%=frac.getFecha() %></td>
+                        <td><%=frac.getTotal() %></td>
+                        <td><a class="btn btn-primary" href="Controller?op=seefrav&id=<%=frac.getCFrac() %>">Ver</a></td>
+                    </tr>
+                    <%}}
+                    }   %>
                 </tbody>
             </table>
             <%}%>
